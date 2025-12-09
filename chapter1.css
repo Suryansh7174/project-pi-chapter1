@@ -1,0 +1,62 @@
+/* Chapter 1 — Stranger-Things / Vecna vibe
+   Red/Black pulse, particles, glitch, scanlines, subtle VHS warp
+*/
+:root{
+  --bg1:#06040a;
+  --bg2:#12020b;
+  --accent:#ff3b3b;
+  --muted:#cfd8ff;
+  --card:rgba(255,255,255,0.04);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter, "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial;color:var(--muted);background:linear-gradient(180deg,var(--bg1),var(--bg2));-webkit-font-smoothing:antialiased}
+.stage{max-width:920px;margin:36px auto;padding:26px;position:relative;z-index:10}
+.title-wrap{text-align:center;margin-bottom:18px}
+.glitch{font-size:2rem;letter-spacing:1px;position:relative;display:inline-block;padding:6px 12px}
+.glitch::before,.glitch::after{
+  content:attr(data-text);position:absolute;left:0;top:0;right:0;opacity:0.8;
+  clip-path:polygon(0 0,100% 0,100% 33%,0 33%);
+}
+.glitch::before{color:#ff6b6b;transform:translate(-2px,-2px);mix-blend-mode:screen;animation:glitchTop 2.3s infinite linear}
+.glitch::after{color:#d0e0ff;transform:translate(2px,2px);mix-blend-mode:screen;animation:glitchBottom 2.7s infinite linear}
+@keyframes glitchTop{0%{transform:translate(-2px,-2px)}20%{transform:translate(2px,-1px)}40%{transform:translate(-1px,2px)}60%{transform:translate(3px,-2px)}80%{transform:translate(-2px,1px)}100%{transform:translate(-2px,-2px)}}
+@keyframes glitchBottom{0%{transform:translate(2px,2px)}20%{transform:translate(-2px,1px)}40%{transform:translate(2px,-2px)}60%{transform:translate(-3px,2px)}80%{transform:translate(2px,-1px)}100%{transform:translate(2px,2px)}}
+
+.sub{margin-top:6px;color:rgba(207,231,255,0.85);font-size:0.95rem}
+
+.card{background:var(--card);padding:18px;border-radius:12px;margin:14px 0;box-shadow:0 8px 30px rgba(0,0,0,0.6);backdrop-filter: blur(6px);border:1px solid rgba(255,255,255,0.03)}
+.hidden{display:none}
+
+.intro-card .intro-text{font-size:1.05rem;line-height:1.5}
+.btn{padding:10px 16px;border-radius:8px;border:0;cursor:pointer;font-weight:600}
+.btn.primary{background:linear-gradient(90deg,var(--accent),#ff6b9b);color:#111;box-shadow:0 8px 28px rgba(255,59,59,0.12)}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.06)}
+.btn.next{background:linear-gradient(90deg,#6b88ff,#5ec6ff);color:#021026;text-decoration:none;display:inline-block;margin-top:12px}
+
+.controls{display:flex;gap:12px;align-items:center;margin-top:12px}
+.score{margin-top:12px;font-weight:700;color:#ffd1d1}
+
+/* QUESTION BLOCK */
+.question{padding:12px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);margin:12px 0;position:relative;border-left:3px solid rgba(255,59,59,0.12)}
+.question p{margin:0 0 8px 0;font-weight:600}
+.question label{display:block;cursor:pointer;padding:6px 8px;border-radius:6px;transition:all .12s ease}
+.question input{margin-right:8px}
+.question label:hover{background:rgba(255,255,255,0.02);transform:translateX(3px)}
+
+/* particle layer */
+#particles{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+.particle{position:absolute;width:3px;height:3px;background:rgba(255,255,255,0.03);border-radius:50%;box-shadow:0 0 8px rgba(255,59,59,0.04)}
+
+/* scanlines & subtle VHS */
+.scanlines{position:fixed;left:0;top:0;width:100%;height:100%;background-image:repeating-linear-gradient(transparent,transparent 3px, rgba(255,255,255,0.02) 4px);mix-blend-mode:overlay;opacity:0.35;z-index:2;pointer-events:none}
+
+/* small footer */
+.footer{margin-top:22px;text-align:center;color:rgba(207,231,255,0.4);font-size:0.9rem}
+
+/* responsive */
+@media (max-width:640px){
+  .stage{padding:14px}
+  .glitch{font-size:1.6rem}
+  .intro-card .intro-text{font-size:1rem}
+}
