@@ -1,127 +1,105 @@
-/* Chapter 1 interactive JS:
-   - Animated particles spawn
-   - Riddles + story MCQs (12 total)
-   - scoring, reveal fact, progress saved in localStorage
-*/
+// STORY DATA
+const storyContent = "The classroom lights pulsed. Mr. William wrote 19 × 11 on the board. The air smelled of ozone. 'Some multiplications are not done,' he whispered. 'They are revealed.'";
 
-(function(){
-  // particle engine (lightweight)
-  const pCount = 40;
-  const particlesLayer = document.getElementById('particles');
-  function spawnParticles(){
-    for(let i=0;i<pCount;i++){
-      const el = document.createElement('div');
-      el.className = 'particle';
-      const size = Math.random()*3+1;
-      el.style.width = el.style.height = size+'px';
-      el.style.left = Math.random()*100+'%';
-      el.style.top = Math.random()*100+'%';
-      el.style.opacity = (Math.random()*0.6+0.05).toString();
-      particlesLayer.appendChild(el);
-      // slow float
-      const dx = (Math.random()-0.5)*60;
-      const dy = (Math.random()-0.5)*60;
-      el.animate([{transform:'translate(0,0)'},{transform:`translate(${dx}px,${dy}px)`}],{duration:15000+Math.random()*12000,iterations:Infinity,direction:'alternate'});
+// TYPEWRITER EFFECT
+window.onload = function() {
+    // Ensure the correct CSS link is used (good practice, though not strictly required if saved correctly)
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'chapter1.css';
+    document.head.appendChild(link);
+    
+    const textElem = document.getElementById('typewriter-text');
+    let i = 0;
+    
+    function typeWriter() {
+        if (i < storyContent.length) {
+            textElem.innerHTML += storyContent.charAt(i);
+            i++;
+            setTimeout(typeWriter, 30); // Typing speed
+        } else {
+            // Once typing is done, reveal the interface
+            setTimeout(() => {
+                document.getElementById('sutra-interface').classList.remove('hidden');
+                document.getElementById('sutra-interface').classList.add('fade-in');
+            }, 1000);
+        }
     }
-  }
-  spawnParticles();
+    typeWriter();
+};
 
-  // quiz content (12 Qs: riddles, story, logic)
-  const questions = [
-    { q:"Riddle 1 — I crack but make no sound. I open with numbers, not hands. What am I?", A:"A secret", B:"A rift", C:"A mirror", D:"A code", correct:"B" },
-    { q:"Riddle 2 — I repeat without moving, my next is always sum. Who am I?", A:"Echo", B:"Fibonacci sequence", C:"Shadow", D:"Wave", correct:"B" },
-    { q:"Story — Who held the notebook the moment the board split?", A:"Suryansh", B:"Vaishnav", C:"Aarav", D:"Sia", correct:"C" },
-    { q:"Story — Which object glowed first?", A:"A pen", B:"The board", C:"A window", D:"A clock", correct:"B" },
-    { q:"Story — Mr. William's notebook was described as:", A:"Shiny and new", B:"Old leather with yellowed pages", C:"Metal bound", D:"Empty", correct:"B" },
-    { q:"Logic — Sequence starts: 1, 1, 2, 3, 5. Next number?", A:"5", B:"8", C:"7", D:"6", correct:"B" },
-    { q:"Observation — When the rift closed briefly, the phone buzzed with a warning. Which time did the message say?", A:"Before midnight", B:"Dawn", C:"Noon", D:"After school", correct:"A" },
-    { q:"Inference — The classroom light flickered in a pattern of pulses equaling which number?", A:"7", B:"9", C:"3", D:"5", correct:"B" },
-    { q:"Riddle 3 — I am part of a circle but less than whole. You name me with a word that sounds like dessert. What am I?", A:"Slice", B:"Arc", C:"Sector", D:"Pi", correct:"A" },
-    { q:"Pattern — Which character first said 'It’s not normal math'?", A:"Aarav", B:"Sia", C:"Suryansh", D:"Vaishnav", correct:"B" },
-    { q:"Critical — The note on the last page asked them to 'Solve the sutra before ___.' Fill the blank.", A:"Noon", B:"Midnight", C:"Sunrise", D:"Tomorrow", correct:"B" },
-    { q:"Wrap — The very first glitch looked like what visual motif?", A:"A circle split", B:"A lightning bolt", C:"A spiral", D:"A staircase", correct:"A" }
-  ];
+// SUTRA SIMULATION LOGIC
+const btnReveal = document.getElementById('btn-reveal');
+const stage1 = document.getElementById('stage-1');
+const stage2 = document.getElementById('stage-2');
+const stage3 = document.getElementById('stage-3');
+const riftLine = document.querySelector('.rift-line');
+const explanation = document.getElementById('sutra-explanation');
 
-  // render questions
-  const area = document.getElementById('questionArea') || document.getElementById('questionArea');
-  function render(){
-    const container = document.getElementById('questionArea');
-    if(!container)return;
-    container.innerHTML = '';
-    questions.forEach((it, idx)=>{
-      const block = document.createElement('div');
-      block.className = 'question';
-      let html = `<p>${it.q}</p>`;
-      ['A','B','C','D'].forEach(letter=>{
-        html += `<label><input type="radio" name="q${idx}" value="${letter}"> ${letter}) ${it[letter]}</label>`;
-      });
-      block.innerHTML = html;
-      container.appendChild(block);
-    });
-  }
+btnReveal.addEventListener('click', () => {
+    // Step 1: Open the Rift
+    riftLine.style.width = "100%";
+    btnReveal.disabled = true;
+    explanation.innerText = "ACTIVATING: Ekādhikena Pūrvena...";
+    
+    // Step 2: Split the Numbers (1.5s delay)
+    setTimeout(() => {
+        stage1.classList.add('hidden');
+        stage2.classList.remove('hidden');
+        stage2.classList.add('fade-in');
+        explanation.innerHTML = "LOGIC: Split 1 and 9. <br> Middle is Sum (1+9=10).";
+    }, 1500);
 
-  // initial visibility/actions
-  const beginBtn = document.getElementById('beginBtn');
-  const quizSection = document.getElementById('quiz');
-  const intro = document.getElementById('intro');
-  beginBtn && beginBtn.addEventListener('click', ()=>{
-    intro.classList.add('hidden');
-    quizSection.classList.remove('hidden');
-    render();
-    window.scrollTo({top:0,behavior:'smooth'});
-  });
+    // Step 3: The Carry Over & Final Reveal (3.5s delay)
+    setTimeout(() => {
+        stage2.classList.add('hidden');
+        stage3.classList.remove('hidden');
+        stage3.classList.add('fade-in');
+        
+        explanation.innerHTML = "RESULT: Carry the 1. (1+1) | 0 | 9 <br> ANSWER: 209";
+        explanation.style.color = "var(--neon-blue)";
+        
+        // Reveal the Gate Puzzle
+        document.getElementById('the-gate').classList.remove('hidden');
+        document.getElementById('the-gate').classList.add('fade-in');
+        window.scrollTo(0, document.body.scrollHeight);
+    }, 4000);
+});
 
-  // scoring & reveal
-  const submitBtn = document.getElementById('submitBtn');
-  const resultText = document.getElementById('scoreText');
-  function revealFact(){
-    const facts = [
-      "The number sequence glimpsed in Chapter 1 is Fibonacci — it appears across nature: shells, petals, and galaxies.",
-      "Rifts in fiction often symbolize unknown rules entering reality — here, that rule is pattern (math) becoming physical.",
-      "Mathematical patterns can be used as memory tools — ancient sutras followed similar 'shortcuts' to speed thinking."
-    ];
-    const fact = facts[Math.floor(Math.random()*facts.length)];
-    document.getElementById('factText').innerText = fact;
-    document.getElementById('fact').classList.remove('hidden');
-    // mark solved in localStorage
-    try{ localStorage.setItem('projectpi_ch1_solved','1'); }catch(e){}
-  }
+// PUZZLE LOCK LOGIC
+function moveFocus(current, nextFieldID) {
+    if (current.value.length >= 1) {
+        document.getElementById(nextFieldID).focus();
+    }
+}
 
-  submitBtn && submitBtn.addEventListener('click', ()=>{
-    let score=0;
-    questions.forEach((it, idx)=>{
-      const sel = document.querySelector(`input[name="q${idx}"]:checked`);
-      if(sel && sel.value === it.correct) score++;
-    });
-    resultText.innerText = `Score: ${score}/${questions.length} (${Math.round((score/questions.length)*100)}%)`;
-    if(score >= Math.ceil(questions.length*0.6)){
-      revealFact();
-      // show next link after small delay & animate
-      setTimeout(()=>{ document.getElementById('nextLink').style.display='inline-block'; },600);
+function checkCode() {
+    const c1 = document.getElementById('code-1').value;
+    const c2 = document.getElementById('code-2').value;
+    const c3 = document.getElementById('code-3').value;
+    const fullCode = c1 + c2 + c3;
+    const portalMsg = document.getElementById('portal-msg');
+
+    if (fullCode === "385") {
+        // Success Animation
+        [document.getElementById('code-1'), document.getElementById('code-2'), document.getElementById('code-3')]
+            .forEach(el => el.classList.add('success-border'));
+        
+        portalMsg.innerHTML = "ACCESS GRANTED. LOADING CHAPTER 2...";
+        portalMsg.style.color = "var(--neon-blue)";
+        portalMsg.style.textShadow = "0 0 10px var(--neon-blue)";
+        
+        // In a real application, this is where you would link to chapter2.html
     } else {
-      // small glitch feedback
-      resultText.style.color = '#ffb3b3';
-      const g = document.querySelector('.glitch');
-      if(g){ g.animate([{filter:'hue-rotate(0deg)'},{filter:'hue-rotate(15deg)'},{filter:'hue-rotate(-10deg)'},{filter:'hue-rotate(0deg)'}],{duration:450,iterations:1}) }
+        if (fullCode.length === 3) {
+            portalMsg.innerText = "INVALID SUTRA.";
+            portalMsg.style.color = "var(--neon-red)";
+            setTimeout(() => {
+                document.getElementById('code-1').value = '';
+                document.getElementById('code-2').value = '';
+                document.getElementById('code-3').value = '';
+                document.getElementById('code-1').focus();
+            }, 1000);
+        }
     }
-  });
-
-  // reset answers
-  const resetBtn = document.getElementById('resetBtn');
-  resetBtn && resetBtn.addEventListener('click', ()=>{
-    document.querySelectorAll('input[type=radio]').forEach(el=>el.checked=false);
-    document.getElementById('scoreText').innerText = '';
-  });
-
-  // auto-load if previously solved (optional)
-  try{
-    if(localStorage.getItem('projectpi_ch1_solved') === '1'){
-      // directly reveal fact & next
-      render();
-      document.getElementById('intro').classList.add('hidden');
-      document.getElementById('quiz').classList.remove('hidden');
-      revealFact();
-      document.getElementById('nextLink').style.display = 'inline-block';
-    }
-  }catch(e){}
-})();
+}
