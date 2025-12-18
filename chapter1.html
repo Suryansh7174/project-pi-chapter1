@@ -1,31 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Project π — Chapter 1: The Rift</title>
-  <link rel="stylesheet" href="chapter1.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Pi: The Rift</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Courier+Prime&family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<div class="glitch-bg"></div>
+    <div class="noise-overlay"></div>
 
-<div class="container fade-in">
-  <h1 class="glitch-text">CHAPTER 1 — THE RIFT</h1>
-  <p class="intro">Reality trembles. Numbers whisper. Something is entering your world...</p>
+    <div class="container">
+        
+        <header class="fade-in">
+            <h1 class="glow-text">PROJECT:<span class="math-symbol">π</span></h1>
+            <p class="sub-text">CHAPTER 1: THE RIFT IN NUMBERS</p>
+        </header>
 
-  <div id="quiz-section"></div>
+        <section id="story-card" class="card">
+            <div class="notebook-holes"></div>
+            <p class="story-text" id="typewriter-text"></p> </section>
 
-  <button class="btn" onclick="submitAnswers()">Reveal Outcome</button>
-  <p id="result"></p>
+        <section id="sutra-interface" class="interface-panel hidden">
+            <div class="panel-header">
+                <span class="status-light red"></span> SYSTEM: SUTRA_DECODER_v1
+            </div>
+            
+            <div class="chalkboard-display">
+                <div class="math-stage" id="stage-1">
+                    <span class="digit" id="d1">1</span>
+                    <span class="digit" id="d2">9</span>
+                    <span class="operator">× 11</span>
+                </div>
+                
+                <div class="rift-line"></div>
 
-  <div id="fact-box" class="hidden">
-    <h2>✨ Rift Insight Unlocked</h2>
-    <p id="fact-text"></p>
-    <a class="next-btn" href="../chapter2/chapter2.html">➡ Proceed to Chapter 2</a>
-  </div>
-</div>
+                <div class="math-stage hidden" id="stage-2">
+                    <div class="split-group">
+                        <div class="arrow-down">↓</div>
+                        <span class="digit-result">1</span>
+                    </div>
+                    <div class="split-group center-glow">
+                        <div class="arrow-down">Sum (1+9)</div>
+                        <span class="digit-result" id="mid-sum">10</span>
+                    </div>
+                    <div class="split-group">
+                        <div class="arrow-down">↓</div>
+                        <span class="digit-result">9</span>
+                    </div>
+                </div>
 
-<script src="chapter1.js"></script>
+                <div class="math-stage hidden" id="stage-3">
+                    <span class="final-glow">209</span>
+                </div>
+            </div>
+
+            <button id="btn-reveal" class="cyber-button">INVOKE SUTRA</button>
+            <p id="sutra-explanation" class="info-text">Target: 19. Rule: One more than the previous.</p>
+        </section>
+
+        <section id="the-gate" class="gate-panel hidden">
+            <h2>THE FINAL LOCK</h2>
+            <p class="riddle">"Guardians sum to 8. Middle is the Bridge. Ascending Order."</p>
+            
+            <div class="lock-inputs">
+                <input type="text" class="digit-input" maxlength="1" id="code-1" onkeyup="moveFocus(this, 'code-2')">
+                <input type="text" class="digit-input" maxlength="1" id="code-2" onkeyup="moveFocus(this, 'code-3')">
+                <input type="text" class="digit-input" maxlength="1" id="code-3" onkeyup="checkCode()">
+            </div>
+
+            <div id="portal-msg" class="portal-closed">Rift Status: SEALED</div>
+        </section>
+
+    </div>
+
+    <script src="chapter1.js"></script>
 </body>
 </html>
